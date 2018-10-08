@@ -1,2 +1,4 @@
 pong/weights/W*
+a3c/experiments
 *.jpg
+*.pyc
