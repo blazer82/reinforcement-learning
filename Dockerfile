@@ -6,4 +6,5 @@ RUN apt-get install -y python-pip python3-opengl zlib1g-dev libjpeg-dev patchelf
 RUN pip install --upgrade pip
 RUN pip install numpy scipy pillow
 RUN pip install tensorflow
-RUN pip install gym gym[atari]
+RUN pip install gym
+RUN pip install gym[atari]
