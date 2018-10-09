@@ -14,6 +14,7 @@ from custom_gym import CustomGym
 from custom_gym_classic_control import CustomGymClassicControl
 import random
 from agent import Agent
+from gym.wrappers import Monitor
 
 random.seed(100)
 
@@ -195,17 +196,23 @@ def evaluator(agent, env, sess, T_queue, summary, saver, save_path):
 
 # If restore is True, then start the model from the most recent checkpoint.
 # Else initialise as usual.
-def a3c(game_name, num_threads=8, restore=None, save_path='model'):
+def a3c(game_name, num_threads=8, restore=None, save_path='model', monitor=True):
     processes = []
     envs = []
-    for _ in range(num_threads+1):
+    for thread_index in range(num_threads+1):
         gym_env = gym.make(game_name)
         if game_name == 'CartPole-v0':
             env = CustomGymClassicControl(game_name)
         else:
-            print "Assuming ATARI game and playing with pixels"
+            print "Assuming ATARI game and playing with pixels for thread " + str(thread_index)
             env = CustomGym(game_name)
+            if monitor and thread_index == 0:
+                print "Monitor enabled for thread " + str(thread_index)
+                env.use_monitor(Monitor(env.env, save_path + '/videos', force=True, mode="training"))
+
         envs.append(env)
+
+    save_path = save_path + '/model'
 
     # Separate out the evaluation environment
     evaluation_env = envs[0]
@@ -293,7 +300,7 @@ def main(argv):
         print "No game name specified, so playing", game_name
     if save_path is None:
         save_path = 'experiments/' + game_name + '/' + \
-        strftime("%Y-%m-%d-%H-%M-%S/model", gmtime())
+        strftime("%Y-%m-%d-%H-%M-%S", gmtime())
         print "No save path specified, so saving to", save_path
     if not os.path.exists(save_path):
         print "Path doesn't exist, so creating"
