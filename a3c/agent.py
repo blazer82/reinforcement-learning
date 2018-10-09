@@ -121,7 +121,7 @@ class Agent():
             num_outputs=16, kernel_size=[8,8], stride=[4,4], padding="VALID",
             activation_fn=tf.nn.relu,
             weights_initializer=tf.contrib.layers.xavier_initializer_conv2d(),
-            biases_initializer=tf.zeros_initializer())
+            biases_initializer=tf.constant_initializer(0.0))
             self.layers['conv1'] = conv1
 
         # Second convolutional layer
@@ -130,7 +130,7 @@ class Agent():
             kernel_size=[4,4], stride=[2,2], padding="VALID",
             activation_fn=tf.nn.relu,
             weights_initializer=tf.contrib.layers.xavier_initializer_conv2d(),
-            biases_initializer=tf.zeros_initializer())
+            biases_initializer=tf.constant_initializer(0.0))
             self.layers['conv2'] = conv2
 
         # Flatten the network
@@ -143,7 +143,7 @@ class Agent():
             fc1 = tf.contrib.layers.fully_connected(inputs=flatten, num_outputs=256,
             activation_fn=tf.nn.relu,
             weights_initializer=tf.contrib.layers.xavier_initializer(),
-            biases_initializer=tf.zeros_initializer())
+            biases_initializer=tf.constant_initializer(0.0))
             self.layers['fc1'] = fc1
 
         # The policy output
@@ -176,7 +176,7 @@ class Agent():
             num_outputs=num_hidden,
             activation_fn=tf.nn.relu,
             weights_initializer=tf.contrib.layers.xavier_initializer(),
-            biases_initializer=tf.zeros_initializer())
+            biases_initializer=tf.constant_initializer(0.0))
             self.layers['fc1'] = fc1
 
         # Fully connected layer with num_hidden hidden units
@@ -185,7 +185,7 @@ class Agent():
             num_outputs=num_hidden,
             activation_fn=tf.nn.relu,
             weights_initializer=tf.contrib.layers.xavier_initializer(),
-            biases_initializer=tf.zeros_initializer())
+            biases_initializer=tf.constant_initializer(0.0))
             self.layers['fc2'] = fc2
 
         # The policy output to the two possible actions
@@ -193,7 +193,7 @@ class Agent():
             policy = tf.contrib.layers.fully_connected(inputs=fc2,
             num_outputs=self.action_size, activation_fn=tf.nn.softmax,
             weights_initializer=tf.contrib.layers.xavier_initializer(),
-            biases_initializer=tf.zeros_initializer())
+            biases_initializer=tf.constant_initializer(0.0))
             self.layers['policy'] = policy
 
         # The value output
@@ -201,7 +201,7 @@ class Agent():
             value = tf.contrib.layers.fully_connected(inputs=fc2, num_outputs=1,
             activation_fn=None,
             weights_initializer=tf.contrib.layers.xavier_initializer(),
-            biases_initializer=tf.zeros_initializer())
+            biases_initializer=tf.constant_initializer(0.0))
             self.layers['value'] = value
 
         return state, policy, value

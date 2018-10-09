@@ -293,7 +293,7 @@ def main(argv):
         print "No game name specified, so playing", game_name
     if save_path is None:
         save_path = 'experiments/' + game_name + '/' + \
-        strftime("%d-%m-%Y-%H:%M:%S/model", gmtime())
+        strftime("%Y-%m-%d-%H-%M-%S/model", gmtime())
         print "No save path specified, so saving to", save_path
     if not os.path.exists(save_path):
         print "Path doesn't exist, so creating"

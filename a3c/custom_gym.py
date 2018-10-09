@@ -29,6 +29,11 @@ class CustomGym:
         self.state = None
         self.game_name = game_name
 
+        self.monitor = None
+
+    def use_monitor(self, monitor):
+        self.monitor = monitor
+
     def preprocess(self, obs, is_start=False):
         grayscale = obs.astype('float32').mean(2)
         s = imresize(grayscale, (self.w, self.h)).astype('float32') * (1.0/255.0)
@@ -43,14 +48,21 @@ class CustomGym:
         self.env.render()
 
     def reset(self):
-        return self.preprocess(self.env.reset(), is_start=True)
+        if self.monitor is None:
+            return self.preprocess(self.env.reset(), is_start=True)
+        else:
+            return self.preprocess(self.monitor.reset(), is_start=True)
 
     def step(self, action_idx):
         action = self.action_space[action_idx]
         accum_reward = 0
         prev_s = None
         for _ in range(self.skip_actions):
-            s, r, term, info = self.env.step(action)
+            if self.monitor is None:
+                s, r, term, info = self.env.step(action)
+            else:
+                s, r, term, info = self.monitor.step(action)
+                
             accum_reward += r
             if term:
                 break

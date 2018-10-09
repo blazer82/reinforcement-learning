@@ -8,11 +8,12 @@ import gym
 import tensorflow as tf
 import numpy as np
 from time import time, sleep
+from gym.wrappers import Monitor
 
 # Returns a tensorflow session with the 
 def run_agent(save_path, T, game_name):
     with tf.Session() as sess:
-        agent = Agent(session=sess, observation_shape=(210,160,3),
+        agent = Agent(session=sess,
         action_size=3,
         optimizer=tf.train.AdamOptimizer(1e-4))
 
@@ -25,11 +26,12 @@ def run_agent(save_path, T, game_name):
 
         return sess, agent
 
-def play(agent, game_name, render=True, num_episodes=10, fps=5.0, monitor=True):
-    gym_env = gym.make(game_name)
+def play(agent, game_name, render=True, num_episodes=2, fps=5.0, monitor=True):
+    env = CustomGym(game_name)
+
     if monitor:
-        gym_env.monitor.start('videos/-v0')
-    env = CustomGym(gym_env, game_name)
+        print "Monitor enabled"
+        env.use_monitor(Monitor(env.env, 'videos/' + game_name, video_callable=lambda x: True, force=True, mode="evaluation"))
 
     desired_frame_length = 1.0 / fps
 
@@ -59,7 +61,7 @@ def play(agent, game_name, render=True, num_episodes=10, fps=5.0, monitor=True):
             current_time = next_time
         episode_rewards.append(episode_reward)
     if monitor:
-        gym_env.monitor.close()
+        env.monitor.close()
     return episode_rewards, episode_vals
 
 def main(argv):
