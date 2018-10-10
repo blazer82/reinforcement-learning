@@ -9,6 +9,9 @@ import tensorflow as tf
 import numpy as np
 from time import time, sleep
 from gym.wrappers import Monitor
+from additional_atari import register_adventure
+
+register_adventure()
 
 # Returns a tensorflow session with the 
 def run_agent(save_path, T, game_name):

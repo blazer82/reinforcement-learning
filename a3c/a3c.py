@@ -15,6 +15,9 @@ from custom_gym_classic_control import CustomGymClassicControl
 import random
 from agent import Agent
 from gym.wrappers import Monitor
+from additional_atari import register_adventure
+
+register_adventure()
 
 random.seed(100)
 
