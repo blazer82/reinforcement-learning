@@ -26,7 +26,7 @@ def run_agent(save_path, T, game_name):
 
         return sess, agent
 
-def play(agent, game_name, render=True, num_episodes=2, fps=5.0, monitor=True):
+def play(agent, game_name, render=True, num_episodes=5, fps=5.0, monitor=True):
     env = CustomGym(game_name)
 
     if monitor:

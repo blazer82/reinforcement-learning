@@ -21,7 +21,7 @@ class CustomGym:
         else:
             # Use the actions specified by Open AI. Sometimes this has more
             # actions than we want, and some actions do the same thing.
-            self.action_space = range(env.action_space.n)
+            self.action_space = range(self.env.action_space.n)
 
         self.action_size = len(self.action_space)
         self.observation_shape = self.env.observation_space.shape
