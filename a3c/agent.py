@@ -25,8 +25,6 @@ class Agent():
             # Compute the one hot vectors for each action given.
             action_one_hot = tf.one_hot(self.action, self.action_size, 1.0, 0.0)
 
-            min_policy = 1e-8
-            max_policy = 1.0 - 1e-8
             self.log_policy = tf.log(tf.clip_by_value(self.policy, 0.000001, 0.999999))
 
             # For a given state and action, compute the log of the policy at
