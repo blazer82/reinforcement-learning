@@ -14,10 +14,10 @@ from additional_atari import register_adventure
 register_adventure()
 
 # Returns a tensorflow session with the 
-def run_agent(save_path, T, game_name):
+def run_agent(env, save_path, T, game_name):
     with tf.Session() as sess:
         agent = Agent(session=sess,
-        action_size=3,
+        action_size=env.action_size,
         optimizer=tf.train.AdamOptimizer(1e-4))
 
         # Create a saver, and only keep 2 checkpoints.
@@ -25,13 +25,11 @@ def run_agent(save_path, T, game_name):
 
         saver.restore(sess, save_path + '-' + str(T))
 
-        play(agent, game_name)
+        play(env, agent, game_name)
 
         return sess, agent
 
-def play(agent, game_name, render=True, num_episodes=5, fps=5.0, monitor=True):
-    env = CustomGym(game_name)
-
+def play(env, agent, game_name, render=True, num_episodes=5, fps=5.0, monitor=True):
     if monitor:
         print "Monitor enabled"
         env.use_monitor(Monitor(env.env, 'videos/' + game_name, video_callable=lambda x: True, force=True, mode="evaluation"))
@@ -93,7 +91,8 @@ def main(argv):
         sys.exit()
     print "Reading from", save_path
     print "Running agent"
-    run_agent(save_path, T, game_name)
+    env = CustomGym(game_name)
+    run_agent(env, save_path, T, game_name)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
