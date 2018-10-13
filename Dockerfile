@@ -8,3 +8,4 @@ RUN pip install numpy scipy pillow
 RUN pip install tensorflow
 RUN pip install gym
 RUN pip install gym[atari]
+RUN pip install PyPokerEngine
